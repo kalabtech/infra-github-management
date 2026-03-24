@@ -1,0 +1,19 @@
+_min_copier_version: "9.0"
+_templates_suffix: ".jinja"
+
+project_name:
+  type: str
+  help: "Project name in lowercase"
+
+aws_region:
+  type: str
+  help: "AWS region"
+
+_exclude:
+  - release-please-config.json
+  - .release-please-manifest.json
+  - .github/workflows/release-please.yml
+  - version.txt
+  - CHANGELOG.md
+  - .git
+  - .copier-answers.yml.example
