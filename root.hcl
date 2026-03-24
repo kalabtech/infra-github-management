@@ -12,18 +12,18 @@ remote_state {
 
 # terragrunt.hcl versions
 generate "versions" {
-  path    = "versions.tf"
+  path      = "versions.tf"
   if_exists = "overwrite_terragrunt"
-  contents = <<EOF
-  terraform {
-    required_version = ">= 1.14.0"
-    required_providers {
-      aws = {
-        source  = "hashicorp/aws"
-        version = "~> 5.0"
-      }
+  contents  = <<EOF
+terraform {
+  required_version = ">= 1.14.0"
+  required_providers {
+    github = {
+      source  = "integrations/github"
+      version = "~> 6.0"
     }
-    backend "s3" {}
   }
-  EOF
+  backend "s3" {}
+}
+EOF
 }
