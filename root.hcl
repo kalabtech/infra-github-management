@@ -27,3 +27,10 @@ terraform {
 }
 EOF
 }
+
+terraform {
+  extra_arguments "var_file" {
+    commands  = ["apply", "plan"]
+    arguments = ["-var-file=${get_terragrunt_dir()}/prod.tfvars"]
+  }
+}

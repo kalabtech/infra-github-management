@@ -1,34 +1,34 @@
 # =============================================================================
-# MAKEFILE - infra-core (multi-stack with Terragrunt)
+# MAKEFILE - infra-core (multi-unit with Terragrunt)
 #
 # Usage:
-#   make plan STACK=unit-name          -> plan a single stack
-#   make plan-all                -> plan all stacks
-#   make apply STACK=unit-name         -> apply a single stack
-#   make resources STACK=shared  -> list resources in a stack
+#   make plan UNIT=unit-name          -> plan a single unit
+#   make plan-all                -> plan all units
+#   make apply UNIT=unit-name         -> apply a single unit
+#   make resources UNIT=shared  -> list resources in a unit
 # =============================================================================
 
 # --- VARIABLES ---
-STACKS_DIR  = ./stacks
+UNITS_DIR  = ./units
 MOD_DIR     = ./modules
-STACK       ?=
-STACK_PATH  = $(STACKS_DIR)/$(STACK)
+UNIT       ?=
+UNIT_PATH  = $(UNITS_DIR)/$(UNIT)
 PLAN_FILE = terraform.tfplan
-ALL_STACKS  = $(wildcard $(STACKS_DIR)/*)
+ALL_UNITS  = $(wildcard $(UNITS_DIR)/*)
 
 # --- GUARDS ---
-# Require STACK parameter
-require-stack:
-	@if [ -z "$(STACK)" ]; then \
-		echo "Error: STACK is required. Usage: make <target> STACK=<name>"; \
-		echo "Available stacks:"; \
-		ls -1 $(STACKS_DIR); \
+# Require UNIT parameter
+require-unit:
+	@if [ -z "$(UNIT)" ]; then \
+		echo "Error: UNIT is required. Usage: make <target> UNIT=<name>"; \
+		echo "Available units:"; \
+		ls -1 $(UNITS_DIR); \
 		exit 1; \
 	fi
-	@if [ ! -d "$(STACK_PATH)" ]; then \
-		echo "Error: stack '$(STACK)' not found in $(STACKS_DIR)/"; \
-		echo "Available stacks:"; \
-		ls -1 $(STACKS_DIR); \
+	@if [ ! -d "$(UNIT_PATH)" ]; then \
+		echo "Error: unit '$(UNIT)' not found in $(UNITS_DIR)/"; \
+		echo "Available units:"; \
+		ls -1 $(UNITS_DIR); \
 		exit 1; \
 	fi
 
@@ -49,7 +49,7 @@ endef
 
 define TFPLAN_SUMMARY
 	@chmod u+x scripts/tf-plan-summary.sh
-	@./scripts/tf-plan-summary.sh $(STACK_PATH)/$(PLAN_FILE)
+	@./scripts/tf-plan-summary.sh $(UNIT_PATH)/$(PLAN_FILE)
 	@chmod u-x scripts/tf-plan-summary.sh
 endef
 
@@ -62,90 +62,90 @@ endef
 .PHONY: all init plan apply destroy resources show state output \
         init-all plan-all apply-all \
         format check lint-init prec prec-all \
-        require-stack require-env stacks set-labels help
+        require-unit require-env units set-labels help
 
 # =============================================================================
-# SINGLE STACK COMMANDS - require STACK=<name>
+# SINGLE UNIT COMMANDS - require UNIT=<name>
 # =============================================================================
 
-init: require-stack require-env ## Initialize a stack - make init STACK=unit-name
+init: require-unit require-env ## Initialize a unit - make init UNIT=unit-name
 	$(AWS_IDENTITY)
-	@echo "Initializing $(STACK)..."
-	@cd $(STACK_PATH) && terragrunt init
+	@echo "Initializing $(UNIT)..."
+	@cd $(UNIT_PATH) && terragrunt init
 
-plan: require-stack ## Plan a stack - make plan STACK=unit-name
+plan: require-unit ## Plan a unit - make plan UNIT=unit-name
 	$(AWS_IDENTITY)
-	@echo "Planning $(STACK)..."
-	@cd $(STACK_PATH) && terragrunt plan -out=$(PLAN_FILE)
+	@echo "Planning $(UNIT)..."
+	@cd $(UNIT_PATH) && terragrunt plan -out=$(PLAN_FILE)
 	$(TFPLAN_SUMMARY)
 
-apply: require-stack ## Apply a stack - make apply STACK=unit-name
+apply: require-unit ## Apply a unit - make apply UNIT=unit-name
 	$(AWS_IDENTITY)
-	@echo "Applying $(STACK)..."
-	@cd $(STACK_PATH) && terragrunt apply $(PLAN_FILE)
+	@echo "Applying $(UNIT)..."
+	@cd $(UNIT_PATH) && terragrunt apply $(PLAN_FILE)
 
-destroy: require-stack ## Destroy a stack - make destroy STACK=unit-name
+destroy: require-unit ## Destroy a unit - make destroy UNIT=unit-name
 	$(AWS_IDENTITY)
-	@echo "WARNING: Destroying $(STACK)"
-	@cd $(STACK_PATH) && terragrunt destroy
+	@echo "WARNING: Destroying $(UNIT)"
+	@cd $(UNIT_PATH) && terragrunt destroy
 
-resources: require-stack ## List resources - make resources STACK=unit-name
+resources: require-unit ## List resources - make resources UNIT=unit-name
 	$(AWS_IDENTITY)
-	@cd $(STACK_PATH) && terragrunt state list
+	@cd $(UNIT_PATH) && terragrunt state list
 
-show: require-stack ## Show a resource - make show STACK=unit-name RES=aws_iam_policy.x
+show: require-unit ## Show a resource - make show UNIT=unit-name RES=aws_iam_policy.x
 	$(AWS_IDENTITY)
-	@cd $(STACK_PATH) && terragrunt state show $(RES)
+	@cd $(UNIT_PATH) && terragrunt state show $(RES)
 
-state: require-stack ## Pull state - make state STACK=unit-name
+state: require-unit ## Pull state - make state UNIT=unit-name
 	$(AWS_IDENTITY)
-	@cd $(STACK_PATH) && terragrunt state pull
+	@cd $(UNIT_PATH) && terragrunt state pull
 
-output: require-stack ## Show outputs - make output STACK=unit-name
+output: require-unit ## Show outputs - make output UNIT=unit-name
 	$(AWS_IDENTITY)
-	@cd $(STACK_PATH) && terragrunt output -json | jq '.'
+	@cd $(UNIT_PATH) && terragrunt output -json | jq '.'
 
 # =============================================================================
-# ALL STACKS COMMANDS - uses terragrunt run-all (resolves dependencies)
+# ALL UNITS COMMANDS - uses terragrunt run-all (resolves dependencies)
 # =============================================================================
 
-init-all: require-env ## Initialize all stacks
+init-all: require-env ## Initialize all units
 	$(AWS_IDENTITY)
-	@cd $(STACKS_DIR) && terragrunt run-all init
+	@cd $(UNITS_DIR) && terragrunt run-all init
 
-plan-all: ## Plan all stacks
+plan-all: ## Plan all units
 	$(AWS_IDENTITY)
-	@cd $(STACKS_DIR) && terragrunt run-all plan
+	@cd $(UNITS_DIR) && terragrunt run-all plan
 
-apply-all: ## Apply all stacks
+apply-all: ## Apply all units
 	$(AWS_IDENTITY)
-	@echo "WARNING: Applying ALL stacks"
-	@cd $(STACKS_DIR) && terragrunt run-all apply
+	@echo "WARNING: Applying ALL units"
+	@cd $(UNITS_DIR) && terragrunt run-all apply
 
 # =============================================================================
 # QUALITY AND SECURITY
 # =============================================================================
 
-format: require-stack ## Format and validate - make check STACK=unit-name
+format: require-unit ## Format and validate - make check UNIT=unit-name
 	@echo "Formatting..."
-	@terraform fmt -recursive $(STACKS_DIR)
+	@terraform fmt -recursive $(UNITS_DIR)
 	@terraform fmt -recursive $(MOD_DIR)
 	@echo "-----------------------"
-	@echo "Validating $(STACK)..."
-	@cd $(STACK_PATH) && terragrunt validate
+	@echo "Validating $(UNIT)..."
+	@cd $(UNIT_PATH) && terragrunt validate
 
-check: ## Security scan stacks and modules
+check: ## Security scan units and modules
 	@echo "-----------------------"
 	@echo "Running TFLint..."
-	@tflint --chdir=$(STACKS_DIR) --recursive --config=$(CURDIR)/.tflint.hcl
+	@tflint --chdir=$(UNITS_DIR) --recursive --config=$(CURDIR)/.tflint.hcl
 	@[ -d $(MOD_DIR) ] && tflint --chdir=$(MOD_DIR) --recursive --config=$(CURDIR)/.tflint.hcl || true
 	@echo "-----------------------"
 	@echo "Scanning for vulnerabilities..."
-	@trivy config --severity MEDIUM,HIGH,CRITICAL $(STACKS_DIR)
+	@trivy config --severity MEDIUM,HIGH,CRITICAL $(UNITS_DIR)
 	@[ -d $(MOD_DIR) ] && trivy config --severity MEDIUM,HIGH,CRITICAL $(MOD_DIR) || true
 
 lint-init: ## Install tflint plugins
-	@tflint --init --chdir=$(STACKS_DIR)
+	@tflint --init --chdir=$(UNITS_DIR)
 	@[ -d $(MOD_DIR) ] && tflint --init --chdir=$(MOD_DIR) || true
 
 # =============================================================================
@@ -162,9 +162,9 @@ prec-all: ## Run pre-commit on all files
 # UTILITIES
 # =============================================================================
 
-stacks: ## List available stacks
-	@echo "Available stacks:"
-	@ls -1 $(STACKS_DIR)
+units: ## List available units
+	@echo "Available units:"
+	@ls -1 $(UNITS_DIR)
 
 set-labels: ## Generate Labels in github repo
 	$(GITHUB_LABELS)
