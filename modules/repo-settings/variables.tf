@@ -12,3 +12,8 @@ variable "protect_dev" {
   type    = bool
   default = false
 }
+
+variable "required_checks" {
+  type    = list(string)
+  default = []
+}

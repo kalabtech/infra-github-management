@@ -23,13 +23,16 @@ resource "github_repository_ruleset" "main" {
     required_linear_history = true
     required_signatures     = true
 
-    required_deployments {
-      required_deployment_environments = ["prod"]
-    }
-
-    required_status_checks {
-      required_check {
-        context = "terraform checks"
+    dynamic "required_status_checks" {
+      for_each = length(var.required_checks) > 0 ? [1] : []
+      content {
+        dynamic "required_check" {
+          for_each = var.required_checks
+          content {
+            context        = required_check.value
+            integration_id = 15368
+          }
+        }
       }
     }
   }
@@ -56,13 +59,16 @@ resource "github_repository_ruleset" "dev" {
     required_linear_history = true
     required_signatures     = true
 
-    required_deployments {
-      required_deployment_environments = ["dev"]
-    }
-
-    required_status_checks {
-      required_check {
-        context = "terraform checks"
+    dynamic "required_status_checks" {
+      for_each = length(var.required_checks) > 0 ? [1] : []
+      content {
+        dynamic "required_check" {
+          for_each = var.required_checks
+          content {
+            context        = required_check.value
+            integration_id = 15368
+          }
+        }
       }
     }
   }
