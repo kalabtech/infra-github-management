@@ -3,7 +3,7 @@ data "github_repository" "this" {
 }
 
 resource "github_repository_ruleset" "main" {
-  count = var.protect_main ? 1 : 0
+  count = var.protect_main && data.github_repository.this.visibility == "public" ? 1 : 0
 
   name        = "main"
   repository  = data.github_repository.this.name
@@ -39,7 +39,7 @@ resource "github_repository_ruleset" "main" {
 }
 
 resource "github_repository_ruleset" "dev" {
-  count = var.protect_dev ? 1 : 0
+  count = var.protect_dev && data.github_repository.this.visibility == "public" ? 1 : 0
 
   name        = "dev"
   repository  = data.github_repository.this.name
