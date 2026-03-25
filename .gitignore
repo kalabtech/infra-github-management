@@ -8,6 +8,8 @@
 *.tfvars.json
 !*.tfvars.example
 .tflint.d/
+modules/**/.terraform/
+modules/**/.terraform.lock.hcl
 
 backend.hcl
 dev.hcl
