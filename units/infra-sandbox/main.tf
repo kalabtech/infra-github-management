@@ -4,4 +4,6 @@ module "isa" {
 
   protect_dev  = var.protect_dev
   protect_main = var.protect_main
+
+  required_checks = var.required_checks
 }
