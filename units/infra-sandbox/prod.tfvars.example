@@ -1,7 +1,19 @@
 # environments/prod.tfvars.example
 # Copy to prod.tfvars and fill in your values
 
-environment    = "prod"
-project_name   = "your-project-name"
-aws_region     = "your-aws-region"
-aws_profile    = "your-aws-profile"
+# github data
+github_owner    = "github-user-name"
+repository_name = "your-project-name"
+
+# Rulesets
+rulesets = {
+    main = {
+        target_branch = "branch-name"
+        required_checks = ["checks-name-1", "checks-name-2"]
+    }
+
+    dev = {
+        target_branch = "branch-name"
+        required_checks = ["checks-name-1", "checks-name-2"]
+    }
+}
