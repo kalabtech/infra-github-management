@@ -5,7 +5,7 @@
 github_owner    = "github-user-name"
 repository_name = "your-project-name"
 
-# Rulesets
+# Rulesets - Module
 rulesets = {
   branch-name = {
     target_branches     = ["target-branches"]
@@ -19,5 +19,26 @@ rulesets = {
     }
     deployment_environments = ["environment-name"]
     required_checks         = ["checks-name-1", "checks-name-2"]
+  }
+}
+
+# Environments - Module
+environment_creation = {
+  environment-name = {
+    prevent_self_review = bool
+    wait_timer          = number
+    reviewers           = number
+    branch_policy = {
+      protected_branches = bool
+    }
+  }
+
+  environment-name = {
+    prevent_self_review = bool
+    wait_timer          = number
+    reviewers           = number
+    branch_policy = {
+      protected_branches = bool
+    }
   }
 }
