@@ -1,5 +1,5 @@
 # .github/workflows/terragrunt-checks.yml
-name: Terraform Checks
+name: Terragrunt Checks
 
 on:
   pull_request:
