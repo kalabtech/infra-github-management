@@ -5,8 +5,12 @@ variable "repository_name" {
 
 variable "rulesets" {
   type = map(object({
-    target_branch   = string
-    required_checks = list(string)
+    target_branches         = list(string)
+    enforcement             = optional(string, "active")
+    required_signatures     = optional(bool, true)
+    required_linear_history = optional(bool, false)
+    deployment_environments = optional(list(string), [])
+    required_checks         = optional(list(string), [])
   }))
   default = {}
 }
