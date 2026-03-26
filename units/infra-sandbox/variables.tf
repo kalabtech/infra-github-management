@@ -8,6 +8,7 @@ variable "repository_name" {
   type        = string
 }
 
+# Variable - Repo Ruleset Module
 variable "rulesets" {
   type = map(object({
     target_branches         = list(string)
