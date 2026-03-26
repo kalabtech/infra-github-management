@@ -59,7 +59,8 @@ define GITHUB_LABELS
 	@chmod u-x scripts/github_labels.sh
 endef
 
-.PHONY: all init plan apply destroy resources show state output \
+.PHONY: all init plan apply destroy state-rm \
+		resources show state output \
         init-all plan-all apply-all \
         format check lint-init prec prec-all \
         require-unit require-env units set-labels help
@@ -89,11 +90,15 @@ destroy: require-unit ## Destroy a unit - make destroy UNIT=unit-name
 	@echo "WARNING: Destroying $(UNIT)"
 	@cd $(UNIT_PATH) && terragrunt destroy
 
+state-rm: require-unit ## Remove a resource from state - make state-rm UNIT=unit-name RES='resource.address'
+	$(AWS_IDENTITY)
+	@cd $(UNIT_PATH) && terragrunt state rm '$(RES)'
+
 resources: require-unit ## List resources - make resources UNIT=unit-name
 	$(AWS_IDENTITY)
 	@cd $(UNIT_PATH) && terragrunt state list
 
-show: require-unit ## Show a resource - make show UNIT=unit-name RES=aws_iam_policy.x
+show: require-unit ## Show a resource - make show UNIT=unit-name RES='resource.adress'
 	$(AWS_IDENTITY)
 	@cd $(UNIT_PATH) && terragrunt state show $(RES)
 

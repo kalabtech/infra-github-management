@@ -18,3 +18,4 @@ _exclude:
   - .git
   - .copier-answers.yml.example
   - docs
+  - terraform-checks.yml
