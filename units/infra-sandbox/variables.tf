@@ -8,17 +8,10 @@ variable "repository_name" {
   type        = string
 }
 
-variable "protect_main" {
-  type    = bool
-  default = true
-}
-
-variable "protect_dev" {
-  type    = bool
-  default = false
-}
-
-variable "required_checks" {
-  type    = list(string)
-  default = []
+variable "rulesets" {
+  type = map(object({
+    target_branch   = string
+    required_checks = list(string)
+  }))
+  default = {}
 }
