@@ -1,5 +1,5 @@
-module "isa" {
-  source          = "../../modules/repo-settings"
+module "infra-sanbox" {
+  source          = "../../modules/repo-rulesets"
   repository_name = var.repository_name
 
   rulesets = var.rulesets
