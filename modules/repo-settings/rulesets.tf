@@ -41,13 +41,14 @@ resource "github_repository_ruleset" "this" {
     }
 
     dynamic "required_status_checks" {
-      for_each = length(each.value.required_checks) > 0 ? [1] : []
+      for_each = length(each.value.required_checks) == null ? [] : [1]
       content {
+        strict_required_status_checks_policy = each.value.required_checks.strict_status_checks
         dynamic "required_check" {
-          for_each = each.value.required_checks
-          iterator = check
+          for_each = each.value.required_checks.checks
+          iterator = i
           content {
-            context        = check.value
+            context        = i.value
             integration_id = 15368
           }
         }

@@ -7,10 +7,15 @@ variable "rulesets" {
   type = map(object({
     target_branches         = list(string)
     enforcement             = optional(string, "active")
-    required_signatures     = optional(bool, true)
+    required_signatures     = optional(bool, false)
     required_linear_history = optional(bool, false)
     deployment_environments = optional(list(string), [])
-    required_checks         = optional(list(string), [])
+
+    required_checks = optional(object({
+      checks               = optional(list(string), [])
+      strict_status_checks = optional(bool, false)
+    }), null)
+
     require_pull_request = optional(object({
       dismiss_stale_reviews_on_push = optional(bool, false)
       require_last_push_approval    = optional(bool, false)
