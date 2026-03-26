@@ -30,7 +30,7 @@ EOF
 
 terraform {
   extra_arguments "var_file" {
-    commands  = ["apply", "plan"]
+    commands  = ["apply", "plan", "destroy"]
     arguments = ["-var-file=${get_terragrunt_dir()}/prod.tfvars"]
   }
 }
