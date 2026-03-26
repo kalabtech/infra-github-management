@@ -30,6 +30,7 @@ resource "github_repository_ruleset" "this" {
         required_approving_review_count = each.value.require_pull_request.required_approvals
         dismiss_stale_reviews_on_push   = each.value.require_pull_request.dismiss_stale_reviews_on_push
         require_last_push_approval      = each.value.require_pull_request.require_last_push_approval
+        allowed_merge_methods           = each.value.require_pull_request.allowed_merge_methods
       }
     }
 
@@ -41,7 +42,7 @@ resource "github_repository_ruleset" "this" {
     }
 
     dynamic "required_status_checks" {
-      for_each = length(each.value.required_checks) == null ? [] : [1]
+      for_each = each.value.required_checks == null ? [] : [1]
       content {
         strict_required_status_checks_policy = each.value.required_checks.strict_status_checks
         dynamic "required_check" {

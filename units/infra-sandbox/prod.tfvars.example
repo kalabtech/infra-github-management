@@ -7,27 +7,15 @@ repository_name = "your-project-name"
 
 # Rulesets
 rulesets = {
-  main = {
-    target_branches     = ["branch-name"]
+  branch-name = {
+    target_branches     = ["target-branches"]
     enforcement         = "active"
     required_signatures = true
     require_pull_request = {
       dismiss_stale_reviews_on_push = false
       require_last_push_approval    = false
       required_approvals            = 1
-    }
-    deployment_environments = ["environment-name"]
-    required_checks         = ["checks-name-1", "checks-name-2"]
-  }
-
-  dev = {
-    target_branches     = ["branch-name"]
-    enforcement         = "active"
-    required_signatures = true
-    require_pull_request = {
-      dismiss_stale_reviews_on_push = false
-      require_last_push_approval    = false
-      required_approvals            = 1
+      allowed_merge_methods         = [ "squash", "merge", "rebase" ]
     }
     deployment_environments = ["environment-name"]
     required_checks         = ["checks-name-1", "checks-name-2"]

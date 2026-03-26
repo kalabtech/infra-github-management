@@ -20,6 +20,7 @@ variable "rulesets" {
       dismiss_stale_reviews_on_push = optional(bool, false)
       require_last_push_approval    = optional(bool, false)
       required_approvals            = optional(number, 0)
+      allowed_merge_methods         = optional(list(string), ["squash", "merge", "rebase"])
     }), null)
   }))
   default = {}
