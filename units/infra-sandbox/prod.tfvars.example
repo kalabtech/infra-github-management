@@ -5,7 +5,7 @@
 github_owner    = "github-user-name"
 repository_name = "your-project-name"
 
-# Rulesets
+# Rulesets - Module
 rulesets = {
   branch-name = {
     target_branches     = ["target-branches"]
@@ -19,5 +19,53 @@ rulesets = {
     }
     deployment_environments = ["environment-name"]
     required_checks         = ["checks-name-1", "checks-name-2"]
+  }
+}
+
+# Environments - Module
+environment_creation = {
+  environment-name = {
+    prevent_self_review = bool
+    wait_timer          = number
+    reviewers           = number
+    branch_policy = {
+      protected_branches = bool
+    }
+  }
+
+  environment-name = {
+    prevent_self_review = bool
+    wait_timer          = number
+    reviewers           = number
+    branch_policy = {
+      protected_branches = bool
+    }
+  }
+}
+
+# GHA Variables and Secrets - Module
+repo_variables = {
+  VAR_NAME = "value"
+}
+
+repo_secrets = {
+  SECRET_NAME = "value"
+}
+
+environment_variables = {
+  prod = {
+    VAR_NAME = "value"
+  }
+  dev = {
+    VAR_NAME = "value"
+  }
+}
+
+environment_secrets = {
+  prod = {
+    SECRET_NAME = "value"
+  }
+  dev = {
+    SECRET_NAME = "value"
   }
 }
