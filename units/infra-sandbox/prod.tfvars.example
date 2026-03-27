@@ -42,3 +42,30 @@ environment_creation = {
     }
   }
 }
+
+# GHA Variables and Secrets - Module
+repo_variables = {
+  VAR_NAME = "value"
+}
+
+repo_secrets = {
+  SECRET_NAME = "value"
+}
+
+environment_variables = {
+  prod = {
+    VAR_NAME = "value"
+  }
+  dev = {
+    VAR_NAME = "value"
+  }
+}
+
+environment_secrets = {
+  prod = {
+    SECRET_NAME = "value"
+  }
+  dev = {
+    SECRET_NAME = "value"
+  }
+}
