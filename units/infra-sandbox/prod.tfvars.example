@@ -69,3 +69,11 @@ environment_secrets = {
     SECRET_NAME = "value"
   }
 }
+
+# Repo Settings
+labels = {
+  label-name = {
+    color       = "label-color"
+    description = "label-description"
+  }
+}

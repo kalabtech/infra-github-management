@@ -72,3 +72,13 @@ variable "environment_secrets" {
   type        = map(map(string))
   default     = {}
 }
+
+# NOTE: labels variables
+variable "labels" {
+  description = "Github Labels"
+  type = map(object({
+    color       = optional(string, "cccccc")
+    description = optional(string, null)
+  }))
+  default = {}
+}

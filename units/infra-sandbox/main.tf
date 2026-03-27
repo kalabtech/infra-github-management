@@ -18,3 +18,9 @@ module "repo-gha" {
   environment_variables = var.environment_variables
   environment_secrets   = var.environment_secrets
 }
+
+module "repo-settings" {
+  source          = "../../modules/repo-settings"
+  repository_name = var.repository_name
+  labels          = var.labels
+}
