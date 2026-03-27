@@ -55,7 +55,7 @@ resource "github_repository_environment" "this" {
 resource "github_actions_variable" "repo" {
   for_each = var.repo_variables
 
-  repository    = var.repository_name
+  repository    = data.github_repository.this.name
   variable_name = each.key
   value         = each.value
 }
@@ -65,7 +65,7 @@ resource "github_actions_variable" "repo" {
 resource "github_actions_secret" "repo" {
   for_each = var.repo_secrets
 
-  repository      = var.repository_name
+  repository      = data.github_repository.this.name
   secret_name     = each.key
   plaintext_value = each.value
 }
@@ -73,7 +73,7 @@ resource "github_actions_secret" "repo" {
 resource "github_actions_environment_variable" "this" {
   for_each = local.environment_variables
 
-  repository    = var.repository_name
+  repository    = data.github_repository.this.name
   environment   = github_repository_environment.this[each.value.environment].environment
   variable_name = each.value.name
   value         = each.value.value
@@ -84,7 +84,7 @@ resource "github_actions_environment_variable" "this" {
 resource "github_actions_environment_secret" "this" {
   for_each = local.environment_secrets
 
-  repository      = var.repository_name
+  repository      = data.github_repository.this.name
   environment     = github_repository_environment.this[each.value.environment].environment
   secret_name     = each.value.name
   plaintext_value = each.value.value
